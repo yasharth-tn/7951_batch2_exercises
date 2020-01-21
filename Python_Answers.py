@@ -11,7 +11,7 @@ df2=pd.read_csv('C:\Users\yasharth.tandon\Desktop\Tiger\imdb.csv',escapechar='\\
 # has been solved as an example
 def least_sales(df):
     # write code to return pandas dataframe
-	ls = df.groupby(["Item"])["Sale_amt"].min().reset_index()
+    ls = df.groupby(["Item"])["Sale_amt"].min().reset_index()
     return ls
 
 # Q2 compute total sales at each year X region
@@ -58,8 +58,8 @@ def sales_pct(df):
 
 # Q7 get imdb rating for fifth movie of dataframe
 def fifth_movie(df):
-	# write code here
-	return df2.iloc[4]['imdbRating']
+    # write code here
+    return df2.iloc[4]['imdbRating']
 
 # Q8 return titles of movies with shortest and longest run time
 def movies(df):
@@ -88,17 +88,17 @@ def subset_df(df):
 # Q11 count the duplicate rows of diamonds DataFrame.
 def dupl_rows(df):
 	# write code here
-	return len(df)-(len(df.drop_duplicates()))
+    return len(df)-(len(df.drop_duplicates()))
 
 # Q12 droping those rows where any value in a row is missing in carat and cut columns
 def drop_row(df):
 	# write code here
-	return df.dropna(subset=['cut','carat'])
+    return df.dropna(subset=['cut','carat'])
 
 # Q13 subset only numeric columns
 def sub_numeric(df):
 	# write code here
-	return df.select_dtypes(include =np.number)
+    return df.select_dtypes(include =np.number)
 
 # Q14 compute volume as (x*y*z) when depth > 60 else 8
 def volume(df):
