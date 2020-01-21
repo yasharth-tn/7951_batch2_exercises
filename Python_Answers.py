@@ -115,3 +115,68 @@ def impute(df):
 	# write code here
     df['price'].fillna((df['price'].mean()), inplace=True)
     return df
+df=pd.read_csv(r'C:\Users\yasharth.tandon\Desktop\Tiger\imdb.csv',escapechar='\\')		       
+def non_zero(row, columns):
+    return list(set(list(columns[~(row == 0)])))
+		       
+#1st Bonus Question
+def Ist_Bonus(df):
+	df['duration']=df['duration']/60
+	df2=df[['year','title','wordsInTitle','type','imdbRating','duration','Action','Adult','Adventure','Animation','Biography','Crime','Documentary','Documentary','Drama','Family','Fantasy','FilmNoir','GameShow','History','Horror','Music','Musical','Mystery','News','RealityTV','Romance','SciFi','Short','Sport','TalkShow','Thriller','War','Western']]	      
+	df2.sort_values(by=['year'])	       
+	df2.dropna(subset=['type', 'year'],inplace=True)	      
+	df2.sort_values(by=['year'],inplace=True)
+	df2['Genere_combo']=df2.iloc[:,6:].apply(lambda x: non_zero(x, df2.iloc[:,6:].columns), axis=1)	       
+	df3=df2.groupby(['year','type']).agg({'imdbRating': ['mean','min','max'],'duration':'sum'})
+	return df3	       
+
+df=pd.read_csv(r'C:\Users\yasharth.tandon\Desktop\Tiger\imdb.csv',escapechar='\\')
+def 2nd_bonus(df):
+    	df['duration']=df['duration']/60
+	df2=df[['year','title','wordsInTitle','type','imdbRating','duration','Action','Adult','Adventure','Animation','Biography','Crime','Documentary','Documentary','Drama','Family','Fantasy','FilmNoir','GameShow','History','Horror','Music','Musical','Mystery','News','RealityTV','Romance','SciFi','Short','Sport','TalkShow','Thriller','War','Western']]	       
+	df2['length_of_title']=df2['wordsInTitle'].map(str).apply(len)	       
+	x1=df2['length_of_title'].corr(df2['imdbRating'])
+	df2.groupby(['year'])['length_of_title'].sum()	       
+	per=np.percentile(df2['length_of_title'],[25,50,75])	       
+	per1=[]	       
+	for i in df2['length_of_title']:
+    		if(i<per[0]):
+        		per1.append('1st percentile')
+    		elif(i>=per[0] and i<per[1]):
+       			per1.append('2nd percentile')
+    		elif(i>=per[1] and i< per[2]):
+        		per1.append('3rd percentile')
+    		elif(i>=per[2] ):
+        		per1.append('4th percentile')	       
+	  df2['percentile']=per1
+          df7=pd.crosstab(df2.year,df2.percentile)
+	  df8=df2.groupby(['year'])['length_of_title'].min().to_frame().reset_index()
+	  df7['min_length']=df8['length_of_title'].values	       
+	  df8=df2.groupby(['year'])['length_of_title'].max().to_frame().reset_index()	       
+	  df7['max_length']=df8['length_of_title'].values	       
+          return x1,df7
+		       
+#Bonus_3rd
+df = pd.read_csv(r'C:\Users\yasharth.tandon\Desktop\Tiger\diamonds.csv',escapechar='\\')
+def Bonus_3rd(df):		 		       
+    	df1=df[df['z']!='None']
+	df1['vol']=np.where(df1['depth']>60,df1['x']*df1['y']*pd.to_numeric(df1['z']),8)	       
+	df1['equal_bins']=pd.qcut(df1['vol'],q=4)	       
+	df5=pd.crosstab(df1.equal_bins,df1.cut,margins=True)
+	x2=df5['All'].iloc[-1]	       
+	df5.apply(lambda x: (x*100)/x2,axis=1)	       
+	return df5
+		       
+df=pd.read_csv(r'C:\Users\yasharth.tandon\Desktop\Tiger\imdb.csv',escapechar='\\')
+def Bonus_5th(df):
+	df['duration_deciles']=pd.cut(df['duration'],bins=10)
+	df2=df.groupby(['duration_deciles']).agg({'nrOfWins':['sum'],'nrOfNominations':['sum'],'title':['count']})
+	df2.columns=df2.columns.droplevel()	       
+	df6=df.groupby(['duration_deciles'])[df.columns.to_list()[16:-1]].sum()	       
+	df6 = pd.DataFrame(df6.columns.values[np.argsort(-df6.values, axis=1)[:, :3]], index=df6.index, columns = ['Top_1_genre','Top_2_genre','Top_3_genre']).reset_index()	       
+	df6.set_index(['duration_deciles'],inplace=True)	       
+	df7 = pd.concat([df2, df6], axis=1)
+	return df7
+		      
+
+		       
