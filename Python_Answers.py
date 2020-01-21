@@ -113,5 +113,5 @@ def volume(df):
 # Q15 impute missing price values with mean
 def impute(df):
 	# write code here
-	df['price'].fillna((df['price'].mean()), inplace=True)
+    df['price'].fillna((df['price'].mean()), inplace=True)
     return df
